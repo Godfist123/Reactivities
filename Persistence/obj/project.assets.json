@@ -4759,8 +4759,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Domain\\Domain.csproj"
+            "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Domain\\Domain.csproj": {
+              "projectPath": "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Domain\\Domain.csproj"
             }
           }
         }

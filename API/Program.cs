@@ -1,3 +1,5 @@
+using Application.Activities.Queries;
+using Application.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -18,11 +20,16 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // Correct Swagger setup
+builder.Services.AddMediatR((opt) =>
+{
+    opt.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
