@@ -5291,11 +5291,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\API\\API.csproj",
+      "projectUniqueName": "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\API\\API.csproj",
+      "projectPath": "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\API\\API.csproj",
       "packagesPath": "C:\\Users\\r\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\API\\obj\\",
+      "outputPath": "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5317,8 +5317,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Application\\Application.csproj": {
-              "projectPath": "c:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Application\\Application.csproj"
+            "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\r\\Desktop\\dotNet\\Reactivities\\Application\\Application.csproj"
             }
           }
         }
