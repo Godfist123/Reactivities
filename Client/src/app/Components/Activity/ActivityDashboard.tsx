@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IActivity } from "../../../Domain/Activity";
 import { Box, Grid2, List } from "@mui/material";
 import ActivityCard from "./ActivityCard";
@@ -6,6 +6,7 @@ import ActivityDetail from "./ActivityDetail";
 import { useOutsideClick } from "../../Hooks/useOutsideClick";
 import ActivityForm from "./ActivityForm";
 import { useActivityContext } from "../../Context/ActivityContext";
+import { useActivityList } from "../../Hooks/useActivityList";
 
 interface ActivityDashboardProps {
   data: IActivity[];
@@ -20,6 +21,12 @@ const ActivityDashboard: React.FC<ActivityDashboardProps> = (props) => {
   const { data, HandleEditOff, HandleEditOn, SelectedActivity } = props;
   const [Selected, setSelected] = useState<IActivity | null>(null);
   const { editMode, setEditMode } = useActivityContext();
+  const { data: selectedData } = useActivityList();
+  useEffect(() => {
+    if (selectedData) {
+      setSelected(selectedData.find((x) => x.id === Selected?.id) || null);
+    }
+  }, [selectedData]);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -52,6 +59,7 @@ const ActivityDashboard: React.FC<ActivityDashboardProps> = (props) => {
                 data={obj}
                 key={obj.id}
                 SelectActivityHandler={SelectActivityHandler}
+                HandleEditOff={HandleEditOff}
               />
             );
           })}

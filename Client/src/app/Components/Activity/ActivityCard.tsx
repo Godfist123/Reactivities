@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -8,14 +9,25 @@ import {
 } from "@mui/material";
 import React from "react";
 import { IActivity } from "../../../Domain/Activity";
+import { useActivityList } from "../../Hooks/useActivityList";
 
 interface ActivityCardProps {
   data: IActivity;
   SelectActivityHandler: (activity: IActivity) => void;
+  HandleEditOff: () => void;
 }
 
 const ActivityCard: React.FC<ActivityCardProps> = (props) => {
-  const { data, SelectActivityHandler } = props;
+  const { data, SelectActivityHandler, HandleEditOff } = props;
+  const { deleteActivity } = useActivityList();
+
+  const deleteActivityHandler = async (id: string) => {
+    await deleteActivity.mutateAsync(id, {
+      onSuccess: () => {
+        HandleEditOff();
+      },
+    });
+  };
 
   return (
     <Card sx={{ borderRadius: 3 }}>
@@ -33,13 +45,23 @@ const ActivityCard: React.FC<ActivityCardProps> = (props) => {
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between", display: "flex" }}>
         <Chip label={data.category} variant="outlined" />
-        <Button
-          size="small"
-          variant="outlined"
-          onClick={() => SelectActivityHandler(data)}
-        >
-          View
-        </Button>
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => SelectActivityHandler(data)}
+          >
+            View
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            color="error"
+            onClick={() => deleteActivityHandler(data.id)}
+          >
+            Delete
+          </Button>
+        </Box>
       </CardActions>
     </Card>
   );

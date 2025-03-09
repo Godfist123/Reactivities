@@ -2,6 +2,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { IActivity } from "../../../Domain/Activity";
+import { useActivityList } from "../../Hooks/useActivityList";
 
 interface ActivityFormProps {
   HandleEditOff: () => void;
@@ -12,9 +13,9 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
   HandleEditOff,
   SelectedActivity,
 }) => {
+  const { updateActivity } = useActivityList();
   const { control, handleSubmit, reset } = useForm<IActivity>({
     defaultValues: {
-      id: "",
       title: "",
       description: "",
       category: "",
@@ -30,8 +31,12 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
     }
   }, [SelectedActivity, reset]);
 
-  const onSubmit = (data: IActivity) => {
-    console.log("Submitted Data:", data);
+  const onSubmit = async (data: IActivity) => {
+    await updateActivity.mutateAsync(data, {
+      onSuccess: () => {
+        HandleEditOff();
+      },
+    });
   };
 
   return (
@@ -108,7 +113,11 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
         />
 
         <Box display="flex" justifyContent="flex-end" gap={2}>
-          <Button type="submit" variant="outlined">
+          <Button
+            type="submit"
+            variant="outlined"
+            disabled={updateActivity.isPending}
+          >
             Submit
           </Button>
           <Button type="button" variant="outlined" onClick={HandleEditOff}>

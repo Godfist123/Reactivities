@@ -1,52 +1,51 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IActivity } from "../../Domain/Activity";
 import ActivityDashboard from "../Components/Activity/ActivityDashboard";
 import { Box } from "@mui/material";
 import { useActivityContext } from "../Context/ActivityContext";
+import { useActivityList } from "../Hooks/useActivityList";
 
-interface ActivityListProps {
-  // Define your props here
-}
-
-const ActivityList: React.FC<ActivityListProps> = (props) => {
-  const [data, setData] = useState<IActivity[]>([]);
+const ActivityList: React.FC = () => {
   const [SelectedActivity, setSelectedActivity] = useState<IActivity | null>(
     null
   );
   const { setEditMode, editMode } = useActivityContext();
 
+  const { data: oldData, isError, isLoading } = useActivityList();
+  const data = oldData?.map((x) => ({
+    ...x,
+    date: new Date(x.date).toISOString().split("T")[0],
+  }));
+
   const handleEditOn = (id?: string) => {
+    if (!data) return; // ✅ Prevents running .find() on undefined
+
     if (id) {
       setSelectedActivity(data.find((x) => x.id === id) || null);
     }
     setEditMode(true);
   };
+
   const handleEditOff = () => {
     setEditMode(false);
     setSelectedActivity(null);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get<IActivity[]>(
-        "http://localhost:5106/api/activities"
-      );
-      const result = response.data;
-      setData(result);
-    };
-    fetchData();
-  }, []);
   return (
-    <Box sx={{ bgcolor: "#eeeeee", ml: 1, mr: 1 }}>
-      <ActivityDashboard
-        data={data}
-        EditMode={editMode}
-        HandleEditOn={handleEditOn}
-        HandleEditOff={handleEditOff}
-        SelectedActivity={SelectedActivity}
-        setSelectedActivity={setSelectedActivity}
-      />
+    <Box sx={{ bgcolor: "#eeeeee", ml: 1, mr: 1, minHeight: "100vh" }}>
+      {isError && <div>Something went wrong</div>}
+      {isLoading && <div>Loading...</div>}
+
+      {!isLoading && !isError && data && (
+        <ActivityDashboard
+          data={data}
+          EditMode={editMode}
+          HandleEditOn={handleEditOn}
+          HandleEditOff={handleEditOff}
+          SelectedActivity={SelectedActivity}
+          setSelectedActivity={setSelectedActivity}
+        />
+      )}
     </Box>
   );
 };

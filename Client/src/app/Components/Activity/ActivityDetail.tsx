@@ -17,6 +17,7 @@ interface ActivityDetailProps {
 
 const ActivityDetail: React.FC<ActivityDetailProps> = (props) => {
   const { data, CancelSelectActivityHandler, HandleEditOn } = props;
+  console.log(data);
 
   return (
     <>

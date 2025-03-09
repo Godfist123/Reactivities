@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Persistence;
@@ -13,6 +14,7 @@ public class CreateActivities
     {
         public async Task<string> Handle(Command command, CancellationToken cancellationToken)
         {
+            command.Activity.Id = Guid.NewGuid().ToString();
             await dbContext.Activities.AddAsync(command.Activity, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             return command.Activity.Id;
