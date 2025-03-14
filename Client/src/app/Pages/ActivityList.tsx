@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IActivity } from "../../Domain/Activity";
-import ActivityDashboard from "../Components/Activity/ActivityDashboard";
+import ActivityDashboard from "../Components/Activity/ActivityDashboard/ActivityDashboard";
 import { Box } from "@mui/material";
 import { useActivityContext } from "../Context/ActivityContext";
 import { useActivityList } from "../Hooks/useActivityList";
@@ -12,10 +12,12 @@ const ActivityList: React.FC = () => {
   const { setEditMode, editMode } = useActivityContext();
 
   const { data: oldData, isError, isLoading } = useActivityList();
-  const data = oldData?.map((x) => ({
-    ...x,
-    date: new Date(x.date).toISOString().split("T")[0],
-  }));
+  const data = Array.isArray(oldData)
+    ? oldData.map((x) => ({
+        ...x,
+        date: new Date(x.date).toISOString().split("T")[0],
+      }))
+    : [];
 
   const handleEditOn = (id?: string) => {
     if (!data) return; // ✅ Prevents running .find() on undefined

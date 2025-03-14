@@ -9,17 +9,21 @@ import {
   Container,
   MenuItem,
   Menu,
+  LinearProgress,
 } from "@mui/material";
 import React, { useState } from "react";
-import { useActivityContext } from "../Context/ActivityContext";
+import { useNavigate } from "react-router-dom";
+import { useUIContext } from "../stores/store";
+import { Observer } from "mobx-react-lite";
 
 interface NavBarProps {
   // Define your props here
 }
 
-const NavBar: React.FC<NavBarProps> = (props) => {
+const NavBar: React.FC<NavBarProps> = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { editMode, setEditMode } = useActivityContext();
+  const navi = useNavigate();
+  const uiContext = useUIContext();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +31,10 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+  const activityHandler = () => {
+    handleMenuClose();
+    navi("/activities");
   };
 
   const open = Boolean(anchorEl);
@@ -67,14 +75,14 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                 <Button
                   sx={{ color: "white" }}
                   variant="text"
-                  onClick={() => setEditMode(true)}
+                  onClick={() => navi("/editActivities")}
                 >
                   Create
                 </Button>
               </Box>
               <Box>
                 <IconButton
-                  onClick={handleMenuOpen}
+                  onClick={(e) => handleMenuOpen(e)}
                   color="inherit"
                   size="medium"
                   edge="end"
@@ -83,7 +91,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                 </IconButton>
 
                 <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-                  <MenuItem onClick={handleMenuClose}>Activities</MenuItem>
+                  <MenuItem onClick={activityHandler}>Activities</MenuItem>
                   <MenuItem onClick={handleMenuClose}>Create Activity</MenuItem>
                   <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
                   <MenuItem onClick={handleMenuClose}>Login</MenuItem>
@@ -92,6 +100,25 @@ const NavBar: React.FC<NavBarProps> = (props) => {
             </Box>
           </Toolbar>
         </Container>
+        <Observer>
+          {() => {
+            return (
+              <>
+                {uiContext.uiStoreInstance.isLoading ? (
+                  <LinearProgress
+                    color="secondary"
+                    sx={{
+                      top: "0",
+                      left: "0",
+                      width: "100%",
+                      height: "3px",
+                    }}
+                  />
+                ) : null}
+              </>
+            );
+          }}
+        </Observer>
       </AppBar>
     </Box>
   );

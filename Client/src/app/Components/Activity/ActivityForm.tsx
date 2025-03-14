@@ -3,17 +3,16 @@ import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { IActivity } from "../../../Domain/Activity";
 import { useActivityList } from "../../Hooks/useActivityList";
+import { useNavigate, useParams } from "react-router-dom";
 
-interface ActivityFormProps {
-  HandleEditOff: () => void;
-  SelectedActivity: IActivity | null;
-}
+interface ActivityFormProps {}
 
-const ActivityForm: React.FC<ActivityFormProps> = ({
-  HandleEditOff,
-  SelectedActivity,
-}) => {
-  const { updateActivity } = useActivityList();
+const ActivityForm: React.FC<ActivityFormProps> = () => {
+  const { id } = useParams();
+  const { updateActivity, data } = useActivityList(id) as {
+    data: IActivity;
+    updateActivity: any;
+  };
   const { control, handleSubmit, reset } = useForm<IActivity>({
     defaultValues: {
       title: "",
@@ -24,19 +23,17 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
       venue: "",
     },
   });
+  const navi = useNavigate();
 
   useEffect(() => {
-    if (SelectedActivity) {
-      reset(SelectedActivity); // Populate form with selected activity
+    if (data) {
+      reset(data as IActivity); // Populate form with selected activity
     }
-  }, [SelectedActivity, reset]);
+  }, [data, reset]);
 
   const onSubmit = async (data: IActivity) => {
-    await updateActivity.mutateAsync(data, {
-      onSuccess: () => {
-        HandleEditOff();
-      },
-    });
+    await updateActivity.mutateAsync(data);
+    navi(-1);
   };
 
   return (
@@ -120,7 +117,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({
           >
             Submit
           </Button>
-          <Button type="button" variant="outlined" onClick={HandleEditOff}>
+          <Button type="button" variant="outlined" onClick={() => navi(-1)}>
             Cancel
           </Button>
         </Box>

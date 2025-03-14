@@ -8,16 +8,20 @@ import App from "./app/Pages/App";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ActivityProvider } from "./app/Context/ActivityContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./app/Styles/styles.css";
+import { CounterProvider } from "./app/stores/store";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <ActivityProvider>
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
-        <App />
-      </QueryClientProvider>
+      <CounterProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
+          <App />
+        </QueryClientProvider>
+      </CounterProvider>
     </StrictMode>
   </ActivityProvider>
 );
