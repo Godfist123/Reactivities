@@ -1,51 +1,44 @@
 using System;
 using Application.Activities.Commands;
+using Application.Activities.DTO;
 using Application.Activities.Queries;
 using Domain;
+
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace API.Controllers;
 
-public class ActivitiesController(IMediator mediator) : BaseApiController(mediator)
+public class ActivitiesController(IMediator mediator) : BaseApiController()
 {
     [HttpGet]
     public async Task<ActionResult<List<Activity>>> GetActivities()
     {
-        return await mediator.Send(new GetActivityList.Query());
+        return ResultHandler<List<Activity>>(await mediator.Send(new GetActivityList.Query()));
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetActivityById(string id)
+    public async Task<ActionResult<Activity>> GetActivityById(string id)
     {
-        try
-        {
-            var activity = await mediator.Send(new GetActivityDetails.Query(id));
-            return Ok(activity);
-        }
-        catch (KeyNotFoundException) // Handle specific exception
-        {
-            return NotFound(new { Message = "Activity not found" });
-        }
-        catch (Exception ex) // Catch unexpected errors
-        {
-            return StatusCode(500, new { Message = "An error occurred", Error = ex.Message });
-        }
+
+        return ResultHandler<Activity>(await mediator.Send(new GetActivityDetails.Query(id)));
+
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> CreateActivity([FromBody] Activity activity)
+    public async Task<ActionResult<string>> CreateActivity([FromBody] CreateActivityDto activity)
     {
-        return await Mediator.Send(new CreateActivities.Command(activity));
+        return ResultHandler<string>(await mediator.Send(new CreateActivities.Command(activity)));
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Activity>> EditActivity(string id, [FromBody] Activity activity)
+    public async Task<ActionResult<Unit>> EditActivity(string id, [FromBody] EditActivityDto activity)
     {
         try
         {
-            return await Mediator.Send(new EditActivity.Command(id, activity));
+            activity.Id = id;
+            return ResultHandler<Unit>(await mediator.Send(new EditActivity.Command(id, activity)));
         }
         catch (KeyNotFoundException)
         {
@@ -54,12 +47,12 @@ public class ActivitiesController(IMediator mediator) : BaseApiController(mediat
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteActivity(string id)
+    public async Task<ActionResult<Unit>> DeleteActivity(string id)
     {
         try
         {
-            await Mediator.Send(new DeleteActivity.Command(id));
-            return NoContent();
+            return ResultHandler<Unit>(await mediator.Send(new DeleteActivity.Command(id)));
+
         }
         catch (KeyNotFoundException)
         {

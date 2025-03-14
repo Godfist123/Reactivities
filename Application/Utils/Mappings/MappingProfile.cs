@@ -1,4 +1,5 @@
 using System;
+using Application.Activities.DTO;
 using AutoMapper;
 using Domain;
 
@@ -8,8 +9,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Domain.Activity, Domain.DTO.EditActivityDto>().ReverseMap();
+        CreateMap<Domain.Activity, EditActivityDto>().ReverseMap();
         CreateMap<Activity, Activity>().ForMember(x => x.Id, opt => opt.Ignore());
+        CreateMap<CreateActivityDto, Activity>();
     }
 
 }

@@ -2,6 +2,10 @@ using Application.Activities.Queries;
 using Application.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using FluentValidation;
+using Application.Activities.Validator;
+using Application.Validator;
+using API.MiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -23,16 +27,18 @@ builder.Services.AddSwaggerGen(); // Correct Swagger setup
 builder.Services.AddMediatR((opt) =>
 {
     opt.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
+    opt.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+builder.Services.AddTransient<ExceptionMiddelware>();
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionMiddelware>();
 app.UseCors("AllowFrontend");
 
 // Configure the HTTP request pipeline.
