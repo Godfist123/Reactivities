@@ -20,7 +20,7 @@ export const useActivityList = (id?: string) => {
         throw error;
       }
     },
-    enabled: !id && location.pathname === "/Activities",
+    enabled: !id && location.pathname === "/activities",
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({

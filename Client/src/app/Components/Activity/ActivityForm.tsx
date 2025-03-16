@@ -10,7 +10,7 @@ interface ActivityFormProps {}
 const ActivityForm: React.FC<ActivityFormProps> = () => {
   const { id } = useParams();
   const { updateActivity, data } = useActivityList(id) as {
-    data: IActivity;
+    data: IActivity | undefined;
     updateActivity: any;
   };
   const { control, handleSubmit, reset } = useForm<IActivity>({

@@ -36,6 +36,10 @@ const NavBar: React.FC<NavBarProps> = () => {
     handleMenuClose();
     navi("/activities");
   };
+  const errorTestHandler = () => {
+    handleMenuClose();
+    navi("/errors");
+  };
 
   const open = Boolean(anchorEl);
 
@@ -95,6 +99,7 @@ const NavBar: React.FC<NavBarProps> = () => {
                   <MenuItem onClick={handleMenuClose}>Create Activity</MenuItem>
                   <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
                   <MenuItem onClick={handleMenuClose}>Login</MenuItem>
+                  <MenuItem onClick={errorTestHandler}>Errors</MenuItem>
                 </Menu>
               </Box>
             </Box>
