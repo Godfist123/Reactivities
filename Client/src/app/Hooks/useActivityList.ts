@@ -26,9 +26,7 @@ export const useActivityList = (id?: string) => {
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
     queryKey: ["activities", id],
     queryFn: async () => {
-      console.log("✅ QUERY FUNCTION RUNNING for Activity ID:", id);
       const resp = await agent.get<IActivity>(`/activities/${id}`);
-      console.log("✅ API Response:", resp);
       return resp.data;
     },
     enabled: !!id,
@@ -36,10 +34,16 @@ export const useActivityList = (id?: string) => {
 
   const updateActivity = useMutation({
     mutationFn: async (activity: IActivity) => {
-      if (activity.id) {
-        await agent.put(`/Activities/${activity.id}`, activity);
-      } else {
-        await agent.post("/Activities", activity);
+      try {
+        if (activity.id) {
+          console.log("update", activity);
+          console.log("updateid", activity.id);
+          await agent.put(`/Activities/${activity.id}`, activity);
+        } else {
+          await agent.post("/Activities", activity);
+        }
+      } catch (error) {
+        console.error("API Error:", error);
       }
     },
     onSuccess: async () => {

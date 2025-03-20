@@ -12,7 +12,6 @@ interface ActivityDetailProps {}
 
 const ActivityDetail: React.FC<ActivityDetailProps> = (props) => {
   const { id } = useParams();
-  console.log("id1", id);
   const { activity, isLoadingActivity } = useActivityList(id) as {
     activity: IActivity;
     isLoadingActivity: boolean;

@@ -176,3 +176,9 @@ C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.Extensions
 C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\FluentValidation.dll
 C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\r\Desktop\dotNet\Reactivities\api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

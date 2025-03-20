@@ -3,7 +3,7 @@ import MainLayouts from "../Layouts/MainLayouts";
 import ActivityList from "./ActivityList";
 import Home from "./Home";
 import ActivityDetail from "./ActivityDetail";
-import ActivityForm from "../Components/Activity/ActivityForm";
+import ActivityForm from "./ActivityForm";
 import TestErrors from "../Components/Error/TestError";
 import Error from "../Components/Error/Error";
 

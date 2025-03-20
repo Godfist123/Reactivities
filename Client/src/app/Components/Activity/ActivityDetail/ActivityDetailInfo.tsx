@@ -1,7 +1,9 @@
 import { CalendarToday, Info, Place } from "@mui/icons-material";
-import { Divider, Grid2, Paper, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid2, Paper, Typography } from "@mui/material";
 import { IActivity } from "../../../../Domain/Activity";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { useState } from "react";
+import MapComponent from "../../Utils/MapComponent";
 
 interface ActivityDetailsInfoProps {
   data: IActivity;
@@ -10,6 +12,8 @@ interface ActivityDetailsInfoProps {
 export default function ActivityDetailsInfo({
   data,
 }: ActivityDetailsInfoProps) {
+  const [mapOpen, setMapOpen] = useState(false);
+
   return (
     <Paper sx={{ mb: 2 }}>
       <Grid2 container alignItems="center" pl={2} py={1}>
@@ -26,7 +30,9 @@ export default function ActivityDetailsInfo({
           <CalendarToday color="info" fontSize="large" />
         </Grid2>
         <Grid2 size={11}>
-          <Typography>{format(data.date, "dd MMM yyyy h:mm a")}</Typography>
+          <Typography>
+            {format(new Date(data.date + "Z"), "dd MMM yyyy h:mm a")}
+          </Typography>
         </Grid2>
       </Grid2>
       <Divider />
@@ -35,12 +41,34 @@ export default function ActivityDetailsInfo({
         <Grid2 size={1}>
           <Place color="info" fontSize="large" />
         </Grid2>
-        <Grid2 size={11}>
+        <Grid2
+          size={11}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Typography>
             {data.venue},{data.city}
           </Typography>
+          <Button
+            onClick={() => {
+              setMapOpen(!mapOpen);
+            }}
+          >
+            {mapOpen ? "Hide Map" : "Show Map"}
+          </Button>
         </Grid2>
       </Grid2>
+      {mapOpen && (
+        <Box sx={{ height: 400, display: "block" }}>
+          <MapComponent
+            position={[data.latitude, data.longitude]}
+            venue={data.venue}
+          />
+        </Box>
+      )}
     </Paper>
   );
 }

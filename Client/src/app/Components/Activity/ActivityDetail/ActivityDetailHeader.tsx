@@ -59,7 +59,7 @@ export default function ActivityDetailsHeader({
             {data.title}
           </Typography>
           <Typography variant="subtitle1">
-            {format(data.date, "dd MMM yyyy h:mm a")}
+            {format(new Date(data.date + "Z"), "dd MMM yyyy h:mm a")}
           </Typography>
           <Typography variant="subtitle2">
             Hosted by{" "}
@@ -87,7 +87,7 @@ export default function ActivityDetailsHeader({
                 variant="contained"
                 color="primary"
                 component={Link}
-                to={`/manage/activityId`}
+                to={`/editActivities/${data.id}`}
                 disabled={isCancelled}
               >
                 Manage Event

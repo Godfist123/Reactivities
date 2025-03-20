@@ -1,5 +1,6 @@
 using System;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
@@ -7,8 +8,40 @@ namespace Persistence;
 
 public class DbInitializer
 {
-    public static async Task SeedData(AppDbContext dbContext)
+    public static async Task SeedData(
+        AppDbContext dbContext
+    , UserManager<User> userManager
+    , RoleManager<IdentityRole> roleManager
+    )
     {
+        if (!roleManager.Roles.Any())
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+            await roleManager.CreateAsync(new IdentityRole("User"));
+        }
+        if (!userManager.Users.Any())
+        {
+            var users = new List<User>()
+            {
+                new User(){DisplayName = "Bob",
+                UserName = "bob@test.com",
+                Email = "bob@test.com"
+                },
+                new User(){DisplayName = "Tom",
+                UserName = "Tom@test.com",
+                Email = "Tom@test.com"
+                },
+                new User(){DisplayName = "Jack",
+                UserName = "Jack@test.com",
+                Email = "Jack@test.com"
+                }
+            };
+            foreach (var user in users)
+            {
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+                await userManager.AddToRoleAsync(user, "User");
+            }
+        }
         if (await dbContext.Activities.AnyAsync()) return;
 
         var Activities = new List<Activity>

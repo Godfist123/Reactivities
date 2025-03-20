@@ -12,7 +12,8 @@ import "./app/Styles/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { CounterProvider } from "./app/stores/store";
-
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
@@ -26,7 +27,9 @@ createRoot(document.getElementById("root")!).render(
             hideProgressBar
             theme="colored"
           />
-          <App />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <App />
+          </LocalizationProvider>
         </QueryClientProvider>
       </CounterProvider>
     </StrictMode>
