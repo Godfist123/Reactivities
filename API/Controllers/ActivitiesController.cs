@@ -14,17 +14,16 @@ namespace API.Controllers;
 public class ActivitiesController(IMediator mediator) : BaseApiController()
 {
     [HttpGet]
-    public async Task<ActionResult<List<Activity>>> GetActivities()
+    public async Task<ActionResult<List<ActivityReturnDto>>> GetActivities()
     {
-        return ResultHandler<List<Activity>>(await mediator.Send(new GetActivityList.Query()));
+        return ResultHandler<List<ActivityReturnDto>>(await mediator.Send(new GetActivityList.Query()));
     }
 
-    [Authorize(Roles = "User")]
     [HttpGet("{id}")]
-    public async Task<ActionResult<Activity>> GetActivityById(string id)
+    public async Task<ActionResult<ActivityReturnDto>> GetActivityById(string id)
     {
 
-        return ResultHandler<Activity>(await mediator.Send(new GetActivityDetails.Query(id)));
+        return ResultHandler<ActivityReturnDto>(await mediator.Send(new GetActivityDetails.Query(id)));
 
     }
 
@@ -35,6 +34,7 @@ public class ActivitiesController(IMediator mediator) : BaseApiController()
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "IsHost")]
     public async Task<ActionResult<Unit>> EditActivity(string id, [FromBody] EditActivityDto activity)
     {
         try
@@ -49,6 +49,7 @@ public class ActivitiesController(IMediator mediator) : BaseApiController()
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "IsHost")]
     public async Task<ActionResult<Unit>> DeleteActivity(string id)
     {
         try
@@ -64,5 +65,11 @@ public class ActivitiesController(IMediator mediator) : BaseApiController()
         {
             return StatusCode(500, new { Message = "An error occurred", Error = ex.Message });
         }
+    }
+
+    [HttpPost("{id}/attend")]
+    public async Task<ActionResult<Unit>> AttendActivity(string id)
+    {
+        return ResultHandler<Unit>(await mediator.Send(new UpdateAttendance.Command(id)));
     }
 }

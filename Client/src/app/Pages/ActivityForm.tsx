@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ActivitySchema,
   activitySchema,
-} from "../Components/Activity/activitySchema";
+} from "../Components/Activity/Schema/activitySchema";
 import SelectInput from "../Components/Utils/SelectInput";
 import DatePickerComponent from "../Components/Utils/DateTimeInput";
 import LocationInput from "../Components/Utils/LocationInput";

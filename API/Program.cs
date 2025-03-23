@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Application.Interfaces;
+using Infrastructure;
+using Infrastructure.Security;
+using static Infrastructure.Security.IsHostRequirement;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -54,7 +59,16 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build())
+        .AddPolicy("IsHost", policy =>
+    {
+        policy.Requirements.Add(new IsHostRequirement());
+    });
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -65,6 +79,8 @@ builder.Services.AddMediatR((opt) =>
     opt.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
     opt.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
+
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

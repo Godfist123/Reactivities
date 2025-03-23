@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
 import { Control, Controller, FieldErrors } from "react-hook-form";
-import { ActivitySchema } from "../Activity/activitySchema";
+import { ActivitySchema } from "../Activity/Schema/activitySchema";
 
 interface SelectInputProps {
   name: string;

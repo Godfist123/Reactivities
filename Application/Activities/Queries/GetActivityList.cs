@@ -1,5 +1,8 @@
 using System;
+using Application.Activities.DTO;
 using Application.Utils;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,19 +12,22 @@ namespace Application.Activities.Queries;
 
 public class GetActivityList
 {
-    public record Query : IRequest<Result<List<Activity>>>;
+    public record Query : IRequest<Result<List<ActivityReturnDto>>>;
 
-    public class Handler(AppDbContext dbContext) : IRequestHandler<Query, Result<List<Activity>>>
+    public class Handler(AppDbContext dbContext, IMapper mapper) : IRequestHandler<Query, Result<List<ActivityReturnDto>>>
     {
-        public async Task<Result<List<Activity>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<List<ActivityReturnDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
             if (await dbContext.Activities.ToListAsync(cancellationToken) != null)
             {
-                return Result<List<Activity>>.Success(await dbContext.Activities.ToListAsync(cancellationToken));
+                return Result<List<ActivityReturnDto>>.Success(
+                    await dbContext.Activities
+                    .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider)
+                    .ToListAsync(cancellationToken));
             }
             else
             {
-                return Result<List<Activity>>.Fail("No activities found", 404);
+                return Result<List<ActivityReturnDto>>.Fail("No activities found", 404);
             }
         }
     }

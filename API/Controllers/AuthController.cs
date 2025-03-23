@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using API.DTO;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +25,7 @@ namespace API.Controllers
             _config = config;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
@@ -45,6 +47,7 @@ namespace API.Controllers
             return Ok(new { message = "User registered successfully" });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
@@ -65,6 +68,9 @@ namespace API.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("displayName", user.DisplayName?? ""),
+                new Claim("bio", user.Bio ?? ""),
+                new Claim("imageUrl", user.ImageUrl ?? ""),
                 new Claim(ClaimTypes.Role, "User") // ✅ Change role as needed
             };
 
