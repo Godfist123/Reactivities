@@ -1,7 +1,9 @@
-import { Card, Badge, CardMedia, Box, Typography, Button } from "@mui/material";
+import { Card, Badge, CardMedia, Box, Typography, Chip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { IActivity } from "../../../../Domain/Activity";
 import { format } from "date-fns";
+import { useActivityList } from "../../../Hooks/useActivityList";
+import StyledBUtton from "../../Utils/StyledButton";
 
 interface ActivityDetailsHeaderProps {
   data: IActivity;
@@ -10,10 +12,7 @@ interface ActivityDetailsHeaderProps {
 export default function ActivityDetailsHeader({
   data,
 }: ActivityDetailsHeaderProps) {
-  const isCancelled = false;
-  const isHost = true;
-  const isGoing = true;
-  const loading = false;
+  const { updateAttendance } = useActivityList(data.id);
 
   return (
     <Card
@@ -24,11 +23,11 @@ export default function ActivityDetailsHeader({
         overflow: "hidden",
       }}
     >
-      {isCancelled && (
-        <Badge
+      {data.isCancelled && (
+        <Chip
           sx={{ position: "absolute", left: 40, top: 20, zIndex: 1000 }}
           color="error"
-          badgeContent="Cancelled"
+          label="Cancelled"
         />
       )}
       <CardMedia
@@ -64,44 +63,49 @@ export default function ActivityDetailsHeader({
           <Typography variant="subtitle2">
             Hosted by{" "}
             <Link
-              to={`/profiles/username`}
+              to={`/profiles/${data.hostId}`}
               style={{ color: "white", fontWeight: "bold" }}
             >
-              Bob
+              {data.hostDisplayName}
             </Link>
           </Typography>
         </Box>
 
         {/* Buttons aligned to the right */}
         <Box sx={{ display: "flex", gap: 2 }}>
-          {isHost ? (
+          {data.isHost ? (
             <>
-              <Button
+              <StyledBUtton
                 variant="contained"
-                color={isCancelled ? "success" : "error"}
-                onClick={() => {}}
+                color={data.isCancelled ? "success" : "error"}
+                onClick={() => {
+                  updateAttendance.mutate(data.id);
+                }}
+                disabled={updateAttendance.isPending}
               >
-                {isCancelled ? "Re-activate Activity" : "Cancel Activity"}
-              </Button>
-              <Button
+                {data.isCancelled ? "Re-activate Activity" : "Cancel Activity"}
+              </StyledBUtton>
+              <StyledBUtton
                 variant="contained"
                 color="primary"
                 component={Link}
                 to={`/editActivities/${data.id}`}
-                disabled={isCancelled}
+                disabled={data.isCancelled}
               >
                 Manage Event
-              </Button>
+              </StyledBUtton>
             </>
           ) : (
-            <Button
+            <StyledBUtton
               variant="contained"
-              color={isGoing ? "primary" : "info"}
-              onClick={() => {}}
-              disabled={isCancelled || loading}
+              color={data.isGoing ? "primary" : "info"}
+              onClick={() => {
+                updateAttendance.mutate(data.id);
+              }}
+              disabled={updateAttendance.isPending || data.isCancelled}
             >
-              {isGoing ? "Cancel Attendance" : "Join Activity"}
-            </Button>
+              {data.isGoing ? "Cancel Attendance" : "Join Activity"}
+            </StyledBUtton>
           )}
         </Box>
       </Box>

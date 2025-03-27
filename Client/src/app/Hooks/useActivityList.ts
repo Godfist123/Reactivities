@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IActivity } from "../../Domain/Activity";
 import { useAxios } from "../Agent/useAxios";
 import { useLocation } from "react-router-dom";
+import { getCurrentUser } from "../Utils/GetCurrentUser";
+import { Profile } from "../../Domain/Profile";
 
 export const useActivityList = (id?: string) => {
   const reactQueryclient = useQueryClient();
@@ -13,7 +15,6 @@ export const useActivityList = (id?: string) => {
     queryFn: async () => {
       try {
         const resp = await agent.get<IActivity[]>("/activities");
-
         return resp.data;
       } catch (error) {
         console.error("API Error:", error);
@@ -21,6 +22,14 @@ export const useActivityList = (id?: string) => {
       }
     },
     enabled: !id && location.pathname === "/activities",
+    select: (data) =>
+      data.map((x) => {
+        return {
+          ...x,
+          isHost: x.hostId === getCurrentUser()?.sub,
+          isGoing: x.attendees.some((x) => x.id === getCurrentUser()?.sub),
+        };
+      }),
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
@@ -30,6 +39,13 @@ export const useActivityList = (id?: string) => {
       return resp.data;
     },
     enabled: !!id,
+    select: (data) => {
+      return {
+        ...data,
+        isHost: data.hostId === getCurrentUser()?.sub,
+        isGoing: data.attendees.some((x) => x.id === getCurrentUser()?.sub),
+      };
+    },
   });
 
   const updateActivity = useMutation({
@@ -64,6 +80,61 @@ export const useActivityList = (id?: string) => {
     },
   });
 
+  const updateAttendance = useMutation({
+    mutationFn: async (id: string) => {
+      await agent.post(`/Activities/${id}/attend`);
+    },
+    onMutate: async (activityId: string) => {
+      await reactQueryclient.cancelQueries({
+        queryKey: ["activities", activityId],
+      });
+      const prevActivity = reactQueryclient.getQueryData<IActivity>([
+        "activities",
+        activityId,
+      ]);
+      reactQueryclient.setQueryData<IActivity>(
+        ["activities", activityId],
+        (oldData) => {
+          if (!oldData || !getCurrentUser()) return oldData;
+
+          const isHost = oldData.hostId === getCurrentUser()?.sub;
+          const isAttending = oldData.attendees.some(
+            (x) => x.id === getCurrentUser()?.sub
+          );
+
+          return {
+            ...oldData,
+            isCancelled: isHost ? !oldData.isCancelled : oldData.isCancelled,
+            attendees: isAttending
+              ? isHost
+                ? oldData.attendees
+                : oldData.attendees.filter(
+                    (x) => x.id !== getCurrentUser()?.sub
+                  )
+              : [
+                  ...oldData.attendees,
+                  {
+                    id: getCurrentUser()?.sub,
+                    displayName: getCurrentUser()?.displayName,
+                    bio: getCurrentUser()?.bio,
+                    imageUrl: getCurrentUser()?.imageUrl,
+                  } as Profile,
+                ],
+          };
+        }
+      );
+      return { prevActivity };
+    },
+    onError: async (error, variables, context) => {
+      if (context?.prevActivity) {
+        reactQueryclient.setQueryData<IActivity>(
+          ["activities", variables],
+          context.prevActivity
+        );
+      }
+    },
+  });
+
   return {
     data,
     isError,
@@ -72,5 +143,6 @@ export const useActivityList = (id?: string) => {
     deleteActivity,
     activity,
     isLoadingActivity,
+    updateAttendance,
   };
 };

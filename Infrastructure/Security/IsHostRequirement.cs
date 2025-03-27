@@ -25,7 +25,7 @@ public class IsHostRequirement : IAuthorizationRequirement
             if (httpContext?.GetRouteValue("id") is not string activityId) return;
 
             var attendee = await dbContext.ActivityAttendees
-            .AsTracking()
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserId == userId && x.ActivityId == activityId);
 
             if (attendee == null) return;

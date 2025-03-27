@@ -53,6 +53,7 @@ export default function ActivityDetailsInfo({
             {data.venue},{data.city}
           </Typography>
           <Button
+            sx={{ mx: 2, whiteSpace: "nowrap" }}
             onClick={() => {
               setMapOpen(!mapOpen);
             }}

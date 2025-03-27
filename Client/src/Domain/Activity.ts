@@ -1,3 +1,5 @@
+import { Profile } from "./Profile";
+
 export interface IActivity {
   id: string; // UUID (Guid)
   title: string;
@@ -9,4 +11,9 @@ export interface IActivity {
   isCancelled: boolean;
   latitude: number;
   longitude: number;
+  attendees: Profile[];
+  isGoing: boolean;
+  isHost: boolean;
+  hostId: string;
+  hostDisplayName: string;
 }

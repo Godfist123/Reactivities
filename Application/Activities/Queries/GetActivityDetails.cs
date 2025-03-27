@@ -3,7 +3,6 @@ using Application.Activities.DTO;
 using Application.Utils;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -19,11 +18,13 @@ public class GetActivityDetails
         public async Task<Result<ActivityReturnDto>> Handle(Query request, CancellationToken cancellationToken)
         {
             var activity = await dbContext.Activities
-            .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+                .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
             return activity == null
                 ? Result<ActivityReturnDto>.Fail("Activity not found", 404)
-                : Result<ActivityReturnDto>.Success(mapper.Map<ActivityReturnDto>(activity));
+                : Result<ActivityReturnDto>.Success(activity); // already mapped
         }
     }
+
 }
