@@ -184,3 +184,5 @@ C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Microsoft.Extensions
 C:\Users\r\Desktop\dotNet\Reactivities\api\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Infrastructure.dll
 C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Infrastructure.pdb
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\CloudinaryDotNet.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\Newtonsoft.Json.dll

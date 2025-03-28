@@ -13,9 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Application.Interfaces;
-using Infrastructure;
+
 using Infrastructure.Security;
 using static Infrastructure.Security.IsHostRequirement;
+using Infrastructure.Photos;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
@@ -80,6 +81,7 @@ builder.Services.AddMediatR((opt) =>
     opt.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 
@@ -91,6 +93,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddTransient<ExceptionMiddelware>();
 
+builder.Services.Configure<CloudinarySettings>
+(builder.Configuration.GetSection("CloudinarySettings"));
 
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddelware>();
