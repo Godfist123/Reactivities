@@ -9,6 +9,7 @@ import Error from "../Components/Error/Error";
 import Login from "./Login";
 import PrivateRoute from "../Layouts/PrivateRoute";
 import Register from "./Register";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <ActivityForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profiles/:id"
+              element={
+                <PrivateRoute>
+                  <Profile />
                 </PrivateRoute>
               }
             />

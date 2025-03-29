@@ -16,4 +16,5 @@ export interface IActivity {
   isHost: boolean;
   hostId: string;
   hostDisplayName: string;
+  hostImageUrl: string;
 }

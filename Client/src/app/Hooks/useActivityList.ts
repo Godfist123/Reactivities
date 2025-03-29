@@ -28,6 +28,8 @@ export const useActivityList = (id?: string) => {
           ...x,
           isHost: x.hostId === getCurrentUser()?.sub,
           isGoing: x.attendees.some((x) => x.id === getCurrentUser()?.sub),
+          hostImageUrl: x.attendees.find((user) => user.id === x.hostId)
+            ?.imageUrl,
         };
       }),
   });
@@ -44,6 +46,8 @@ export const useActivityList = (id?: string) => {
         ...data,
         isHost: data.hostId === getCurrentUser()?.sub,
         isGoing: data.attendees.some((x) => x.id === getCurrentUser()?.sub),
+        hostImageUrl: data.attendees.find((user) => user.id === data.hostId)
+          ?.imageUrl,
       };
     },
   });

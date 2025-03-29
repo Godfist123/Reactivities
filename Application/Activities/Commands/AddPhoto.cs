@@ -28,6 +28,12 @@ public class AddPhoto
             };
 
             await dbContext.Photos.AddAsync(photo, cancellationToken);
+            var user = dbContext.Users.FirstOrDefault(x => x.Id == userAccessor.GetUserId());
+            if (user != null)
+            {
+                user.ImageUrl ??= photo.Url;
+            }
+
             var flag = await dbContext.SaveChangesAsync(cancellationToken) > 0;
             if (!flag) return Result<Photo>.Fail("Failed to add photo", 400);
             return Result<Photo>.Success(photo);

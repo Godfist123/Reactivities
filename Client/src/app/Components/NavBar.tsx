@@ -1,7 +1,6 @@
 import {
   Add,
   Group,
-  Login,
   Logout,
   Menu as MenuIcon,
   Person,
@@ -19,7 +18,6 @@ import {
   LinearProgress,
   Avatar,
   ListItemIcon,
-  List,
   ListItemText,
   Divider,
 } from "@mui/material";
@@ -29,6 +27,7 @@ import { useUIContext } from "../stores/store";
 import { Observer } from "mobx-react-lite";
 import { useAccount } from "../Hooks/useAccount";
 import { User } from "../../Domain/User";
+import { useProfile } from "../Hooks/useProfile";
 
 interface NavBarProps {
   // Define your props here
@@ -40,6 +39,7 @@ const NavBar: React.FC<NavBarProps> = () => {
   const navi = useNavigate();
   const uiContext = useUIContext();
   const { getCurrentUser, logout } = useAccount();
+  const { profile } = useProfile(user?.sub!);
 
   useEffect(() => {
     const syncUser = () => {
@@ -63,7 +63,7 @@ const NavBar: React.FC<NavBarProps> = () => {
       window.removeEventListener("user-logout", syncUser);
     };
   }, []);
-  console.log(user?.displayName);
+  console.log(user);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -123,7 +123,7 @@ const NavBar: React.FC<NavBarProps> = () => {
                   edge="end"
                 >
                   <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar />
+                    <Avatar src={profile?.imageUrl} alt="User Avatar" />
                     {user?.displayName}
                   </Box>
                 </IconButton>
@@ -144,7 +144,7 @@ const NavBar: React.FC<NavBarProps> = () => {
                   <MenuItem
                     onClick={() => {
                       handleMenuClose();
-                      navi("/profile");
+                      navi(`/profiles/${user?.sub}`);
                     }}
                   >
                     <ListItemIcon>

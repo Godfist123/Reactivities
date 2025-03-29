@@ -41,7 +41,13 @@ const ActivityCard: React.FC<ActivityCardProps> = (props) => {
         p={1}
       >
         <CardHeader
-          avatar={<Avatar sx={{ Height: 80, Width: 80 }} />}
+          avatar={
+            <Avatar
+              sx={{ Height: 80, Width: 80 }}
+              src={data.hostImageUrl}
+              alt="image of host"
+            />
+          }
           title={data.title}
           titleTypographyProps={{
             fontWeight: "bold",

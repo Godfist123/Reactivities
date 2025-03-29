@@ -34,6 +34,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
         <CardContent>
           <Box display="flex" alignItems="center" gap={2}>
             <Typography variant="h5">{profile.displayName}</Typography>
+            {profile.bio && (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {profile.bio}
+              </Typography>
+            )}
             {following && (
               <Chip
                 size="small"

@@ -81,7 +81,7 @@ namespace API.Controllers
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1), // ✅ Token expires in 1 hour
+                expires: DateTime.UtcNow.AddHours(10), // ✅ Token expires in 10 hour
                 signingCredentials: creds
             );
 
