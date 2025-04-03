@@ -31,7 +31,7 @@ export default function ActivityDetailsInfo({
         </Grid2>
         <Grid2 size={11}>
           <Typography>
-            {format(new Date(data.date + "Z"), "dd MMM yyyy h:mm a")}
+            {format(new Date(data.date), "dd MMM yyyy h:mm a")}
           </Typography>
         </Grid2>
       </Grid2>

@@ -28,6 +28,7 @@ public class IsHostRequirement : IAuthorizationRequirement
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.UserId == userId && x.ActivityId == activityId);
 
+
             if (attendee == null) return;
 
             if (attendee.IsHost) context.Succeed(requirement);
