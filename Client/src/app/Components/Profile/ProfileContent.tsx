@@ -2,6 +2,7 @@ import { Box, Paper, Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
 import ProfilePhotos from "./ProfilePhotos";
 import ProfileAbout from "./ProfileAbout";
+import ProfileFollowings from "./ProfileFollowings";
 
 interface ProfileContentProps {
   // Define your props here
@@ -24,11 +25,11 @@ const ProfileContent: React.FC<ProfileContentProps> = (props) => {
     },
     {
       label: "Followers",
-      content: <div>Followers</div>,
+      content: <ProfileFollowings activeTab={3} />,
     },
     {
       label: "Following",
-      content: <div>Following</div>,
+      content: <ProfileFollowings activeTab={4} />,
     },
   ];
 

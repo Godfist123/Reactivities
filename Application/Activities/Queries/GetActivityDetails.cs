@@ -1,5 +1,6 @@
 using System;
 using Application.Activities.DTO;
+using Application.Interfaces;
 using Application.Utils;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -13,12 +14,14 @@ public class GetActivityDetails
 {
     public record Query(string Id) : IRequest<Result<ActivityReturnDto>>;
 
-    public class Handler(AppDbContext dbContext, IMapper mapper) : IRequestHandler<Query, Result<ActivityReturnDto>>
+    public class Handler(AppDbContext dbContext, IMapper mapper, IUserAccessor userAccessor)
+    : IRequestHandler<Query, Result<ActivityReturnDto>>
     {
         public async Task<Result<ActivityReturnDto>> Handle(Query request, CancellationToken cancellationToken)
         {
             var activity = await dbContext.Activities
-                .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider)
+                .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider,
+                        new { currentUserId = userAccessor.GetUserId() })
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             return activity == null

@@ -17,11 +17,10 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
-  const following = false;
   return (
     <Link to={`/profiles/${profile.id}`} style={{ textDecoration: "none" }}>
       <Card
-        sx={{ borderRadius: 3, p: 3, maxWidth: 300, textDecoration: "none" }}
+        sx={{ borderRadius: 3, p: 3, maxWidth: 250, textDecoration: "none" }}
         elevation={3}
       >
         <CardMedia
@@ -47,7 +46,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
                 {profile.bio}
               </Typography>
             )}
-            {following && (
+            {profile.isFollowing && (
               <Chip
                 size="small"
                 label="Following"
@@ -67,7 +66,9 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
           }}
         >
           <Person />
-          <Typography sx={{ ml: 1 }}>20 followers</Typography>
+          <Typography sx={{ ml: 1 }}>
+            {profile.followersCount} followers
+          </Typography>
         </Box>
       </Card>
     </Link>

@@ -1,5 +1,6 @@
 using System;
 using Application.Activities.DTO;
+using Application.Interfaces;
 using Application.Utils;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -14,7 +15,8 @@ public class GetActivityList
 {
     public record Query : IRequest<Result<List<ActivityReturnDto>>>;
 
-    public class Handler(AppDbContext dbContext, IMapper mapper) : IRequestHandler<Query, Result<List<ActivityReturnDto>>>
+    public class Handler(AppDbContext dbContext, IMapper mapper, IUserAccessor userAccessor)
+    : IRequestHandler<Query, Result<List<ActivityReturnDto>>>
     {
         public async Task<Result<List<ActivityReturnDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
@@ -22,7 +24,8 @@ public class GetActivityList
             {
                 return Result<List<ActivityReturnDto>>.Success(
                     await dbContext.Activities
-                    .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider)
+                    .ProjectTo<ActivityReturnDto>(mapper.ConfigurationProvider,
+                        new { currentUserId = userAccessor.GetUserId() })
                     .ToListAsync(cancellationToken));
             }
             else

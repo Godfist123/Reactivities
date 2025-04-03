@@ -17,7 +17,6 @@ interface ActivityDetailsSidebarProps {
 export default function ActivityDetailsSidebar({
   activity,
 }: ActivityDetailsSidebarProps) {
-  const following = true;
   return (
     <>
       <Paper
@@ -49,7 +48,7 @@ export default function ActivityDetailsSidebar({
                   </ListItemAvatar>
                   <ListItemText>
                     <Typography variant="h6">{attendee.displayName}</Typography>
-                    {following && (
+                    {attendee.isFollowing && (
                       <Typography variant="body2" color="orange">
                         Following
                       </Typography>

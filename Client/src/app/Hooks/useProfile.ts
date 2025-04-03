@@ -5,7 +5,7 @@ import { Photo } from "../../Domain/Photo";
 import { useMemo } from "react";
 import { getCurrentUser } from "../Utils/GetCurrentUser";
 
-export const useProfile = (id: string) => {
+export const useProfile = (id?: string, predicate?: string) => {
   const agent = useAxios();
   const queryclient = useQueryClient();
 
@@ -14,7 +14,7 @@ export const useProfile = (id: string) => {
     queryFn: async () => {
       return (await agent.get<Profile>(`/Profile/${id}`)).data;
     },
-    enabled: !!id, // Only run the query if id is provided
+    enabled: !!id && !predicate, // Only run the query if id is provided
   });
 
   const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
@@ -22,7 +22,7 @@ export const useProfile = (id: string) => {
     queryFn: async () => {
       return (await agent.get<Photo[]>(`/Profile/Photos/${id}`)).data;
     },
-    enabled: !!id, // Only run the query if id is provided
+    enabled: !!id && !predicate, // Only run the query if id is provided
   });
 
   const uploadPhoto = useMutation({
@@ -65,6 +65,34 @@ export const useProfile = (id: string) => {
     return getCurrentUser()?.sub === id;
   }, [id]);
 
+  const updateFollowing = useMutation({
+    mutationFn: async (targetId: string) => {
+      await agent.post(`/Profile/follow/${targetId}`);
+    },
+    onSuccess: async () => {
+      await queryclient.invalidateQueries({ queryKey: ["profile", id] });
+      await queryclient.invalidateQueries({
+        queryKey: ["followings", id, "followers"],
+      });
+    },
+  });
+
+  const { data: followings, isLoading: loadingFollowings } = useQuery<
+    Profile[]
+  >({
+    queryKey: ["followings", id, predicate],
+    queryFn: async () => {
+      const response = await agent.get<Profile[]>(
+        `/Profile/follow-list/${id}`,
+        {
+          params: { predicate },
+        }
+      );
+      return response.data;
+    },
+    enabled: !!id && !!predicate,
+  });
+
   return {
     profile,
     isLoading,
@@ -74,5 +102,8 @@ export const useProfile = (id: string) => {
     uploadPhoto,
     setMainPhoto,
     deletePhoto,
+    updateFollowing,
+    followings,
+    loadingFollowings,
   };
 };

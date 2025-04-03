@@ -11,13 +11,18 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Profile } from "../../../Domain/Profile";
+import { useProfile } from "../../Hooks/useProfile";
+import { getCurrentUser } from "../../Utils/GetCurrentUser";
 
 interface ProfileHeaderProps {
   profile: Profile;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
-  const isFollowing = true;
+  const { updateFollowing } = useProfile(profile.id);
+  const toggleFollow = () => {
+    updateFollowing.mutate(profile.id);
+  };
 
   return (
     <Paper elevation={3} sx={{ padding: 4, borderRadius: 3 }}>
@@ -31,7 +36,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
             />
             <Box display="flex" flexDirection="column" gap={2}>
               <Typography variant="h4">{profile.displayName}</Typography>
-              {isFollowing && (
+              {profile.isFollowing && (
                 <Chip
                   label="Following"
                   color="secondary"
@@ -52,20 +57,25 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
             >
               <Box textAlign="center">
                 <Typography variant="h5">Followers</Typography>
-                <Typography variant="h4">100</Typography>
+                <Typography variant="h4">{profile.followersCount}</Typography>
               </Box>
               <Box textAlign="center">
                 <Typography variant="h5">Following</Typography>
-                <Typography variant="h4">200</Typography>
+                <Typography variant="h4">{profile.followingCount}</Typography>
               </Box>
             </Box>
             <Divider sx={{ width: "100%" }} />
             <Button
               fullWidth
               variant="outlined"
-              color={isFollowing ? "error" : "success"}
+              color={profile.isFollowing ? "error" : "success"}
+              onClick={toggleFollow}
+              disabled={
+                getCurrentUser()?.sub === profile.id ||
+                updateFollowing.isPending
+              }
             >
-              {isFollowing ? "Unfollow" : "Follow"}
+              {profile.isFollowing ? "Unfollow" : "Follow"}
             </Button>
           </Stack>
         </Grid2>
