@@ -24,7 +24,8 @@ jobs:
           node-version: "18.x"
 
       - name: Install dependencies
-        run: cd Client
+        run: |
+          cd Client
           npm install
           npm run build
 
