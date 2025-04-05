@@ -7,7 +7,7 @@ interface HomeProps {
   // Define your props here
 }
 
-const Home: React.FC<HomeProps> = (props) => {
+const Home: React.FC<HomeProps> = () => {
   return (
     <Paper
       sx={{
@@ -20,6 +20,7 @@ const Home: React.FC<HomeProps> = (props) => {
         height: "100vh",
         width: "100vw",
         gap: 6,
+        borderRadius: 0,
         backgroundImage:
           "linear-gradient(135deg,rgb(64, 67, 99) 0%,rgb(107, 117, 254) 30%,rgb(21, 23, 173) 90%)",
       }}

@@ -9,7 +9,7 @@ interface ProfileProps {
   // Define your props here
 }
 
-const Profile: React.FC<ProfileProps> = (props) => {
+const Profile: React.FC<ProfileProps> = () => {
   const { id } = useParams<{ id: string }>();
   const { profile, isLoading } = useProfile(id!);
 

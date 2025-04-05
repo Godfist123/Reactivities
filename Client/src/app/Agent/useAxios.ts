@@ -50,7 +50,6 @@ export const useAxios = () => {
       if (resp.data.token) {
         localStorage.setItem("token", resp.data.token);
       }
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // ⏳ Wait for 1s
       uiContext.uiStoreInstance.isIdle();
       return resp;
     },

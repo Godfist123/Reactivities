@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IActivity } from "../../../../Domain/Activity";
 import { Box, Grid2, List } from "@mui/material";
 import ActivityCard from "./ActivityCard";
@@ -18,7 +18,7 @@ interface ActivityDashboardProps {
 }
 
 const ActivityDashboard = observer((props: ActivityDashboardProps) => {
-  const { data, HandleEditOff } = props;
+  const { HandleEditOff } = props;
   const [Selected, setSelected] = useState<IActivity | null>(null);
   const { data: datalist, fetchNextPage, hasNextPage } = useActivityList();
   const selectedData = datalist?.pages.flatMap((x) => x.items);

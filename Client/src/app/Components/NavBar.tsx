@@ -1,10 +1,4 @@
-import {
-  Add,
-  Group,
-  Logout,
-  Menu as MenuIcon,
-  Person,
-} from "@mui/icons-material";
+import { Add, Group, Logout, Person } from "@mui/icons-material";
 import {
   Box,
   AppBar,

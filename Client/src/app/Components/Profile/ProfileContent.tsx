@@ -8,7 +8,7 @@ interface ProfileContentProps {
   // Define your props here
 }
 
-const ProfileContent: React.FC<ProfileContentProps> = (props) => {
+const ProfileContent: React.FC<ProfileContentProps> = () => {
   const [value, setValue] = useState(0);
   const tabContent = [
     {

@@ -1,4 +1,4 @@
-import { Card, Badge, CardMedia, Box, Typography, Chip } from "@mui/material";
+import { Card, CardMedia, Box, Typography, Chip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { IActivity } from "../../../../Domain/Activity";
 import { format } from "date-fns";

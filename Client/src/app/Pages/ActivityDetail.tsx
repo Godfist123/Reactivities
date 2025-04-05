@@ -10,7 +10,7 @@ import { useActivityList } from "../Hooks/useActivityList";
 
 interface ActivityDetailProps {}
 
-const ActivityDetail: React.FC<ActivityDetailProps> = (props) => {
+const ActivityDetail: React.FC<ActivityDetailProps> = () => {
   const { id } = useParams();
   const { activity, isLoadingActivity } = useActivityList(id) as {
     activity: IActivity;
@@ -24,7 +24,7 @@ const ActivityDetail: React.FC<ActivityDetailProps> = (props) => {
         <Grid2 size={8}>
           <ActivityDetailHeader data={activity} />
           <ActivityDetailInfo data={activity} />
-          <ActivityDetailChat data={activity} />
+          <ActivityDetailChat />
         </Grid2>
         <Grid2 size={4}>
           <ActivityDetailSidebar activity={activity} />

@@ -7,7 +7,7 @@ interface NotFoundProps {
   // Define your props here
 }
 
-const Error: React.FC<NotFoundProps> = (props) => {
+const Error: React.FC<NotFoundProps> = () => {
   const { status } = useParams();
   const { state } = useLocation();
   return (

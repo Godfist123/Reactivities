@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useProfile } from "../../Hooks/useProfile";
 import { Box, Divider, Typography } from "@mui/material";
 import ProfileCard from "./ProfileCard";
-import { PersonOff } from "@mui/icons-material";
 
 interface ProfileFollowingsProps {
   activeTab: number;

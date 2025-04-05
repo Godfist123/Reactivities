@@ -25,7 +25,6 @@ namespace API.Controllers
             _config = config;
         }
 
-        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
@@ -47,7 +46,6 @@ namespace API.Controllers
             return Ok(new { message = "User registered successfully" });
         }
 
-        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {

@@ -49,7 +49,6 @@ export const useActivityList = (id?: string) => {
         throw error;
       }
     },
-    staleTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,

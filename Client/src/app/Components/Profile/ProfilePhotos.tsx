@@ -17,7 +17,7 @@ interface ProfilePhotosProps {
   // Define your props here
 }
 
-const ProfilePhotos: React.FC<ProfilePhotosProps> = (props) => {
+const ProfilePhotos: React.FC<ProfilePhotosProps> = () => {
   const { id } = useParams<{ id: string }>();
   const {
     photos,

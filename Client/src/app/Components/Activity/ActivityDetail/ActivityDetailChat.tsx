@@ -8,18 +8,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import { IActivity } from "../../../../Domain/Activity";
 import { useComments } from "../../../Hooks/useComments";
 import { timeAgo } from "../../../Utils/TimeAgo";
 import { useForm, Controller } from "react-hook-form";
 import { observer } from "mobx-react-lite";
 
-interface ActivityDetailsChatProps {
-  data: IActivity;
-}
-const ActivityDetailsChat = observer(function ActivityDetailsChat({
-  data,
-}: ActivityDetailsChatProps) {
+const ActivityDetailsChat = observer(function ActivityDetailsChat() {
   const { id } = useParams();
   const commentStore = useComments(id as string);
 

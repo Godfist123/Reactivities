@@ -79,14 +79,14 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
-builder.Services.AddAuthorizationBuilder()
-    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build())
-        .AddPolicy("IsHost", policy =>
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsHost", policy =>
     {
         policy.Requirements.Add(new IsHostRequirement());
     });
+});
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -118,7 +118,12 @@ app.UseMiddleware<ExceptionMiddelware>();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDefaultFiles(); // This looks for index.html
+app.UseStaticFiles();  // This serves files from wwwroot
+app.MapControllers();
+
 app.MapHub<CommentHub>("/comments"); // Map the SignalR hub
+app.MapFallbackToController("Index", "Fallback"); // Fallback to the controller for SPA routing
 
 // Configure the HTTP request pipeline.
 
@@ -147,6 +152,5 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-app.MapControllers();
 
 app.Run();

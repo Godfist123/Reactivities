@@ -18,10 +18,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Home />} />
           <Route path="/" element={<MainLayouts />}>
-            <Route index element={<Home />} />
             <Route
-              path="/activities"
+              path="activities"
               element={
                 <PrivateRoute>
                   <ActivityList />
@@ -29,7 +29,7 @@ function App() {
               }
             />
             <Route
-              path="/activities/:id"
+              path="activities/:id"
               element={
                 <PrivateRoute>
                   <ActivityDetail />
@@ -37,7 +37,7 @@ function App() {
               }
             />
             <Route
-              path="/editActivities/:id"
+              path="editActivities/:id"
               element={
                 <PrivateRoute>
                   <ActivityForm />
@@ -45,7 +45,7 @@ function App() {
               }
             />
             <Route
-              path="/editActivities"
+              path="editActivities"
               element={
                 <PrivateRoute>
                   <ActivityForm />
@@ -53,7 +53,7 @@ function App() {
               }
             />
             <Route
-              path="/profiles/:id"
+              path="profiles/:id"
               element={
                 <PrivateRoute>
                   <Profile />
@@ -61,7 +61,7 @@ function App() {
               }
             />
             <Route path="errors" element={<TestErrors />}></Route>
-            <Route path="/error/:status" element={<Error />} />
+            <Route path="error/:status" element={<Error />} />
             <Route path="*" element={<div>Not Found</div>} />
           </Route>
         </Routes>

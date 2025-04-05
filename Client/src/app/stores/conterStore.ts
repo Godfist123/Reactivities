@@ -1,4 +1,4 @@
-import { observable, action, makeObservable } from "mobx";
+import { observable, makeObservable } from "mobx";
 export default class CounterStore {
   title = "Counter Store";
   count = 0;

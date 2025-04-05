@@ -35,7 +35,7 @@ export const useProfile = (id?: string, predicate?: string) => {
         })
       ).data;
     },
-    onSuccess: async (photo) => {
+    onSuccess: async () => {
       await queryclient.invalidateQueries({ queryKey: ["photos", id] });
       await queryclient.invalidateQueries({ queryKey: ["profile", id] });
     },

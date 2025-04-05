@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAxios } from "../../Agent/useAxios";
 
 export default function TestErrors() {
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [_, setValidationErrors] = useState<string[]>([]);
   const agent = useAxios();
 
   const { mutate } = useMutation({

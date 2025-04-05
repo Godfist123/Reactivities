@@ -7,7 +7,7 @@ interface ProfileAboutProps {
   // Define your props here
 }
 
-const ProfileAbout: React.FC<ProfileAboutProps> = (props) => {
+const ProfileAbout: React.FC<ProfileAboutProps> = () => {
   const { id } = useParams();
   const { profile } = useProfile(id as string);
   return (

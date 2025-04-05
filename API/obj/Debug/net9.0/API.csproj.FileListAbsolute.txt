@@ -186,3 +186,8 @@ C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\refint\API.dll
 C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\API.pdb
 C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\API.genruntimeconfig.cache
 C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\ref\API.dll
+C:\Users\r\Desktop\dotNet\Reactivities\API\bin\Debug\net9.0\API.staticwebassets.runtime.json
+C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\compressed\4pit3vs01m-69kjnsiwqx.gz
+C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\compressed\pu4go7ebcu-54vl9h7sb4.gz
+C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\compressed\xnvgtqc3rj-gipty1tn98.gz
+C:\Users\r\Desktop\dotNet\Reactivities\API\obj\Debug\net9.0\compressed\1dpm1p8bmc-is0skdlsog.gz

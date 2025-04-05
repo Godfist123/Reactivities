@@ -2,9 +2,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "../Components/NavBar";
 import { Box, Container, CssBaseline } from "@mui/material";
 
-type Props = {};
-
-const MainLayouts = (props: Props) => {
+const MainLayouts = () => {
   return (
     <Box sx={{ bgcolor: "#eeeeee", ml: 1, mr: 1, minHeight: "100vh" }}>
       <CssBaseline />
