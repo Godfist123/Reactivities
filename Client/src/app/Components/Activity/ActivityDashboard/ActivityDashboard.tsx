@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IActivity } from "../../../../Domain/Activity";
-import { Grid2, List } from "@mui/material";
+import { Box, Grid2, List } from "@mui/material";
 import ActivityCard from "./ActivityCard";
 import { useOutsideClick } from "../../../Hooks/useOutsideClick";
 import { useActivityList } from "../../../Hooks/useActivityList";
 import ActivityFilters from "./ActivityFilters";
+import { useInView } from "react-intersection-observer";
+import { observer } from "mobx-react-lite";
 
 interface ActivityDashboardProps {
   data: IActivity[];
@@ -15,10 +17,11 @@ interface ActivityDashboardProps {
   setSelectedActivity: (activity: IActivity | null) => void;
 }
 
-const ActivityDashboard: React.FC<ActivityDashboardProps> = (props) => {
+const ActivityDashboard = observer((props: ActivityDashboardProps) => {
   const { data, HandleEditOff } = props;
   const [Selected, setSelected] = useState<IActivity | null>(null);
-  const { data: selectedData } = useActivityList() as { data: IActivity[] };
+  const { data: datalist, fetchNextPage, hasNextPage } = useActivityList();
+  const selectedData = datalist?.pages.flatMap((x) => x.items);
   useEffect(() => {
     if (selectedData) {
       setSelected(selectedData.find((x) => x.id === Selected?.id) || null);
@@ -32,6 +35,15 @@ const ActivityDashboard: React.FC<ActivityDashboardProps> = (props) => {
     HandleEditOff();
   });
 
+  const { ref: inViewRef } = useInView({
+    threshold: 0.5,
+    onChange: (inView) => {
+      if (inView && hasNextPage) {
+        fetchNextPage();
+      }
+    },
+  });
+
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={8}>
@@ -43,16 +55,26 @@ const ActivityDashboard: React.FC<ActivityDashboardProps> = (props) => {
             width: "100%",
           }}
         >
-          {data.map((obj: IActivity) => {
-            return <ActivityCard data={obj} key={obj.id} />;
+          {selectedData?.map((obj: IActivity, index) => {
+            return (
+              <Box
+                key={obj.id}
+                ref={index === selectedData?.length - 1 ? inViewRef : undefined}
+              >
+                <ActivityCard data={obj} key={obj.id} />
+              </Box>
+            );
           })}
         </List>
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2
+        size={4}
+        sx={{ position: "sticky", top: 112, alignSelf: "flex-start" }}
+      >
         <ActivityFilters />
       </Grid2>
     </Grid2>
   );
-};
+});
 
 export default ActivityDashboard;

@@ -7,14 +7,15 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-interface ActivityFiltersProps {
-  // Define your props here
-}
+import { useUIContext } from "../../../stores/store";
+import { observer } from "mobx-react-lite";
 
-const ActivityFilters: React.FC<ActivityFiltersProps> = (props) => {
+const ActivityFilters = observer(() => {
+  const {
+    activityStoreInstance: { setFilter, setStartDate, filter, startDate },
+  } = useUIContext();
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", gap: 3, borderRadius: 3 }}
@@ -32,13 +33,22 @@ const ActivityFilters: React.FC<ActivityFiltersProps> = (props) => {
             Filters
           </Typography>
           <MenuList>
-            <MenuItem>
+            <MenuItem
+              selected={filter === "all"}
+              onClick={() => setFilter("all")}
+            >
               <ListItemText primary="All Activities" />
             </MenuItem>
-            <MenuItem>
+            <MenuItem
+              selected={filter === "isGoing"}
+              onClick={() => setFilter("isGoing")}
+            >
               <ListItemText primary="I'm going" />
             </MenuItem>
-            <MenuItem>
+            <MenuItem
+              selected={filter === "isHost"}
+              onClick={() => setFilter("isHost")}
+            >
               <ListItemText primary="I'm hosting" />
             </MenuItem>
           </MenuList>
@@ -53,10 +63,13 @@ const ActivityFilters: React.FC<ActivityFiltersProps> = (props) => {
           <Event sx={{ mr: 1 }} />
           Date
         </Typography>
-        <Calendar />
+        <Calendar
+          value={startDate}
+          onChange={(date) => setStartDate((date as Date).toISOString())}
+        />
       </Box>
     </Box>
   );
-};
+});
 
 export default ActivityFilters;

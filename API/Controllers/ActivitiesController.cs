@@ -2,6 +2,7 @@ using System;
 using Application.Activities.Commands;
 using Application.Activities.DTO;
 using Application.Activities.Queries;
+using Application.Utils;
 using Domain;
 
 using MediatR;
@@ -14,9 +15,13 @@ namespace API.Controllers;
 public class ActivitiesController(IMediator mediator) : BaseApiController()
 {
     [HttpGet]
-    public async Task<ActionResult<List<ActivityReturnDto>>> GetActivities()
+    public async Task<ActionResult<PagedList<ActivityReturnDto, DateTime?>>> GetActivities(
+        [FromQuery] ActivityParams activityParams)
     {
-        return ResultHandler<List<ActivityReturnDto>>(await mediator.Send(new GetActivityList.Query()));
+        return ResultHandler<PagedList<ActivityReturnDto, DateTime?>>(await mediator.Send(new GetActivityList.Query
+        {
+            Params = activityParams
+        }));
     }
 
     [HttpGet("{id}")]

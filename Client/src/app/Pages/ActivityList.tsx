@@ -11,7 +11,8 @@ const ActivityList: React.FC = () => {
   );
   const { setEditMode, editMode } = useActivityContext();
 
-  const { data: oldData, isError, isLoading } = useActivityList();
+  const { data: dataGroup, isError, isLoading } = useActivityList();
+  const oldData = dataGroup?.pages.flatMap((x) => x.items);
   const data = Array.isArray(oldData)
     ? oldData.map((x) => ({
         ...x,

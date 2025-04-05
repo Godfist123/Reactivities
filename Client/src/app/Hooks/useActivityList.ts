@@ -1,37 +1,72 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { IActivity } from "../../Domain/Activity";
 import { useAxios } from "../Agent/useAxios";
 import { useLocation } from "react-router-dom";
 import { getCurrentUser } from "../Utils/GetCurrentUser";
 import { Profile } from "../../Domain/Profile";
+import { PagedList } from "../../Domain/PagedList";
+import { useUIContext } from "../stores/store";
 
 export const useActivityList = (id?: string) => {
   const reactQueryclient = useQueryClient();
   const agent = useAxios();
   const location = useLocation();
+  const {
+    activityStoreInstance: { filter, startDate },
+  } = useUIContext();
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ["activities"],
-    queryFn: async () => {
+  const {
+    data,
+    isError,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<PagedList<IActivity, string>>({
+    queryKey: ["activities", filter, startDate],
+    queryFn: async ({ pageParam = null }) => {
       try {
-        const resp = await agent.get<IActivity[]>("/activities");
+        const resp = await agent.get<PagedList<IActivity, string>>(
+          "/activities",
+          {
+            params: {
+              cursor: pageParam,
+              pageSize: 5,
+              filter,
+              startDate,
+            },
+          }
+        );
         return resp.data;
       } catch (error) {
         console.error("API Error:", error);
         throw error;
       }
     },
+    staleTime: 1000 * 60 * 5,
+    placeholderData: keepPreviousData,
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled: !id && location.pathname === "/activities",
-    select: (data) =>
-      data.map((x) => {
-        return {
+    select: (data) => ({
+      ...data,
+      pages: data.pages.map((page) => ({
+        ...page,
+        items: page.items.map((x) => ({
           ...x,
           isHost: x.hostId === getCurrentUser()?.sub,
           isGoing: x.attendees.some((x) => x.id === getCurrentUser()?.sub),
           hostImageUrl: x.attendees.find((user) => user.id === x.hostId)
             ?.imageUrl,
-        };
-      }),
+        })),
+      })),
+    }),
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
@@ -129,7 +164,7 @@ export const useActivityList = (id?: string) => {
       );
       return { prevActivity };
     },
-    onError: async (error, variables, context) => {
+    onError: async (_, variables, context) => {
       if (context?.prevActivity) {
         reactQueryclient.setQueryData<IActivity>(
           ["activities", variables],
@@ -148,5 +183,8 @@ export const useActivityList = (id?: string) => {
     activity,
     isLoadingActivity,
     updateAttendance,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
   };
 };

@@ -15,11 +15,11 @@ import {
   Container,
   MenuItem,
   Menu,
-  LinearProgress,
   Avatar,
   ListItemIcon,
   ListItemText,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -86,7 +86,7 @@ const NavBar: React.FC<NavBarProps> = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
           backgroundImage:
             "linear-gradient(135deg,rgb(64, 67, 99) 0%,rgb(107, 117, 254) 30%,rgb(21, 23, 173) 90%)",
@@ -101,10 +101,35 @@ const NavBar: React.FC<NavBarProps> = () => {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Group fontSize="medium" />
-              <Typography variant="subtitle1" fontWeight="bold">
+              <Group fontSize="large" />
+              <Typography
+                variant="subtitle1"
+                fontSize={30}
+                fontWeight="bold"
+                sx={{ position: "relative" }}
+              >
                 Reactivities
               </Typography>
+              <Observer>
+                {() => {
+                  return (
+                    <>
+                      {uiContext.uiStoreInstance.isLoading ? (
+                        <CircularProgress
+                          size={20}
+                          thickness={5}
+                          sx={{
+                            color: "white",
+                            top: "32%",
+                            position: "absolute",
+                            left: "21%",
+                          }}
+                        />
+                      ) : null}
+                    </>
+                  );
+                }}
+              </Observer>
             </Box>
 
             <Box
@@ -196,25 +221,6 @@ const NavBar: React.FC<NavBarProps> = () => {
             </Box>
           </Toolbar>
         </Container>
-        <Observer>
-          {() => {
-            return (
-              <>
-                {uiContext.uiStoreInstance.isLoading ? (
-                  <LinearProgress
-                    color="secondary"
-                    sx={{
-                      top: "0",
-                      left: "0",
-                      width: "100%",
-                      height: "3px",
-                    }}
-                  />
-                ) : null}
-              </>
-            );
-          }}
-        </Observer>
       </AppBar>
     </Box>
   );
